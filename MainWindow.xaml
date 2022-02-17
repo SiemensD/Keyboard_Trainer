@@ -1,0 +1,191 @@
+﻿<Window x:Class="Keyboard.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Keyboard"
+        mc:Ignorable="d"
+        Title="Keyboard Trainer" Height="390" Width="773" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Background="White" WindowStyle="SingleBorderWindow">
+    <Window.Resources>        
+        <Style x:Key="smallButton" TargetType="Button">
+            <Setter Property="Width" Value="46"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="25"/>
+        </Style>
+        <Style x:Key="middleButton" TargetType="Button">
+            <Setter Property="Width" Value="75"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+        <Style x:Key="bigButton" TargetType="Button">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+        <Style x:Key="VeryBigButton" TargetType="Button">
+            <Setter Property="Width" Value="125"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <ControlTemplate x:Key="ButtonTemplate1" TargetType="{x:Type ButtonBase}">
+            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" 
+                    BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true" CornerRadius="6">
+                <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Button.IsDefaulted" Value="true">
+                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                    <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        
+    </Window.Resources>
+    <Grid>
+        <StackPanel>
+        <Border x:Name="infoBorder" Background="#fff" Height="50" VerticalAlignment="Top" >
+            <Grid x:Name="infoGrid" Margin="5" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                        <TextBlock Text="Speed: " Margin="2"/>
+                        <TextBlock x:Name="textSpeed" Text="0" FontWeight="Bold" Margin="2"/>
+                        <TextBlock Text="hours/min" Margin="10 2 2 2"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                        <TextBlock Text="Fails: " Margin="2"/>
+                        <TextBlock x:Name="textFails" Text="0" FontWeight="Bold" Margin="2"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+                        <TextBlock Text="Difficulty: "/>
+                        <TextBlock x:Name="textDifficulty"  FontWeight="Bold" Margin="2"/>
+                        <Slider x:Name="Difficulty" Maximum="20" Minimum="0" Width="100" Margin="5 0 2 0" SmallChange="1" Cursor="Hand" ValueChanged="Difficulty_ValueChanged"/>                        
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
+                        <CheckBox Content="Case Sensitive"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="2">
+                        <Button x:Name="StartButton" Content="Start" Margin="1 0 1 0"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="3">
+                        <Button x:Name="StopButton" Content="Stop" Margin="1 0 1 0"/>
+                    </StackPanel>
+                </Grid>
+        </Border>           
+        <TextBlock x:Name="textBlock1" HorizontalAlignment="Stretch" Background="LightBlue" Height="50" KeyDown="TextBlock_KeyDown"/>
+            <StackPanel Orientation="Horizontal" Background="White">
+                <Grid x:Name="buttonGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Stretch">
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="'" Background="#FFF07795" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="1" Background="#FFF07795" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="2" Background="#FFF07795" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="3" Background="#FFE4EE76" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="4" Background="#FF7FF077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="5" Background="#FF77BEF0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="6" Background="#FF77BEF0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="7" Background="#FFDB77F0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="8" Background="#FFDB77F0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="9" Background="#FFF07795" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="0" Background="#FFE6F077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="-" Background="#FF7FF077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="=" Background="#FF7FF077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Backspase" Background="#FFB5B5B5" Style="{StaticResource bigButton}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Stretch">
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Tab" Background="#FFB5B5B5" Style="{StaticResource middleButton }" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="q" Background="#FFF07795" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="w" Background="#FFE4EE76" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="e" Background="#FF7FF077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="r" Background="#FF77BEF0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="t" Background="#FF77BEF0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="y" Background="#FFDB77F0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="u" Background="#FFDB77F0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="i" Background="#FFF07795" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="o" Background="#FFE4EE76" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="p" Background="#FF7FF077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="[" Background="#FF7FF077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="]" Background="#FF7FF077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="\" Background="#FF7FF077" Style="{StaticResource middleButton}" />                        
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Stretch">
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Caps lock" Background="#FFB5B5B5" Style="{StaticResource bigButton }" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="a" Background="#FFF07795" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="s" Background="#FFE4EE76" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="d" Background="#FF7FF077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="f" Background="#FF77BEF0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="g" Background="#FF77BEF0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="h" Background="#FFDB77F0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="j" Background="#FFDB77F0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="k" Background="#FFF07795" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="l" Background="#FFE4EE76" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content=";" Background="#FF7FF077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="'" Background="#FF7FF077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Enter" Background="#FFB5B5B5" Style="{StaticResource bigButton}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Stretch">
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Caps lock" Background="#FFB5B5B5" Style="{StaticResource VeryBigButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="a" Background="#FFF07795" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="s" Background="#FFE4EE76" Style="{StaticResource smallButton}" />                        
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="f" Background="#FF77BEF0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="g" Background="#FF77BEF0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="h" Background="#FFDB77F0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="j" Background="#FFDB77F0" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="k" Background="#FFF07795" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="l" Background="#FFE4EE76" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content=";" Background="#FF7FF077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="'" Background="#FF7FF077" Style="{StaticResource smallButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Enter" Background="#FFB5B5B5" Style="{StaticResource VeryBigButton}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="4" HorizontalAlignment="Stretch">
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Ctrl" Background="#FFB5B5B5" Style="{StaticResource middleButton }" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Win" Background="#FFB5B5B5" Style="{StaticResource middleButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Alt" Background="#FFB5B5B5" Style="{StaticResource middleButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Space" Background="#FFE5BB72" Style="{StaticResource smallButton}"  Width="280"/>
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Alt" Background="#FFB5B5B5" Style="{StaticResource middleButton}" />
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Win" Background="#FFB5B5B5" Style="{StaticResource middleButton}"/>
+                        <Button Template="{DynamicResource ButtonTemplate1}" Content="Ctrl" Background="#FFB5B5B5" Style="{StaticResource middleButton}" />
+                    </StackPanel>
+                </Grid>
+                
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
